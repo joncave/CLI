@@ -19,7 +19,7 @@ def get_config():
     return config
 
 def write_config(config):
-    print_output("Writing Config..")
+    print_output("Writing Faction config file..")
     config_dir = os.path.dirname(config_file_path)
     path = Path(config_dir)
     path.mkdir(parents=True, exist_ok=True)
@@ -29,6 +29,7 @@ def write_config(config):
 def generate_config_file(admin_username,
                          admin_password,
                          api_upload_dir,
+                         build,
                          console_port,
                          containers,
                          docker_network_name,
@@ -72,6 +73,7 @@ def generate_config_file(admin_username,
         "ADMIN_USERNAME": admin_username,
         "ADMIN_PASSWORD": admin_password,
         "API_UPLOAD_DIR": api_upload_dir,
+        "BUILD": build,
         "CONSOLE_PORT": console_port,
         "CONTAINERS": containers_list,
         "EXTERNAL_ADDRESS": external_address,

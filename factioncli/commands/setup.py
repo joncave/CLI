@@ -5,9 +5,10 @@ from cliff.command import Command
 from factioncli.processing.cli.printing import print_output
 from factioncli.processing.config import generate_config_file, get_config
 from factioncli.processing.faction.database import update_database, create_database_migration
-from factioncli.processing.docker.compose import write_compose_file
+from factioncli.processing.docker.compose import write_build_compose_file, write_hub_compose_file
 from factioncli.processing.setup.api_key import create_api_key
 from factioncli.processing.faction.control import build_faction
+from factioncli.processing.faction.repo import download_github_repo
 from factioncli.processing.setup.transport import create_direct_transport
 from factioncli.processing.setup.user_role import create_faction_roles
 from factioncli.processing.setup.user import create_admin_user, create_system_user, get_user_id
@@ -29,12 +30,18 @@ class Setup(Command):
         parser.add_argument('--api-upload-dir',
                             help="Directory on the API container where uploads are stored. Changing this hasn't been tested and will probably break stuff.",
                             default="/opt/faction/uploads")
+        parser.add_argument('--build',
+                            help="Build Faction from source instead of pulling images from Docker Hub",
+                            action="store_true")
         parser.add_argument('--console-port',
                             help="Port that the console will listen on",
                             default=443)
+        parser.add_argument('--components',
+                            help="Names of the components that make up Faction",
+                            default=["Core", "Build-Service-Dotnet", "Console", "API"])
         parser.add_argument('--container-names',
                             help="Names of the containers that make up Faction",
-                            default=["faction_core_1","faction_api_1","faction_console_1","faction_dotnet-build_1","faction_db_1","faction_mq_1"])
+                            default=["faction_core_1","faction_api_1","faction_console_1","faction_build-service-dotnet_1","faction_db_1","faction_mq_1"])
         parser.add_argument('--docker-network-name',
                             help="Name of the network used in Docker for Faction Containers.",
                             default="faction-network")
@@ -47,6 +54,9 @@ class Setup(Command):
         parser.add_argument('--faction-path',
                             help="Faction install path. Changing this hasn't been tested. It will probably break stuff.",
                             default="/opt/faction")
+        parser.add_argument('--github-pat',
+                            help="Github Personal Access Token. Used to download stuff from private repos",
+                            default=None)
         parser.add_argument('--rabbit-host',
                             help="Hostname/IP for RabbitMQ",
                             default="mq")
@@ -81,6 +91,7 @@ class Setup(Command):
         generate_config_file(admin_username=parsed_args.admin_username,
                              admin_password=parsed_args.admin_password,
                              api_upload_dir=parsed_args.api_upload_dir,
+                             build=parsed_args.build,
                              console_port=parsed_args.console_port,
                              containers=parsed_args.container_names,
                              docker_network_name=parsed_args.docker_network_name,
@@ -97,7 +108,18 @@ class Setup(Command):
                              system_username=parsed_args.system_username,
                              system_password=parsed_args.system_password)
 
-        write_compose_file()
+        if parsed_args.build:
+            for component in parsed_args.components:
+                download_github_repo("FactionC2/{0}".format(component), "{0}/source/{1}".format(parsed_args.faction_path, component), parsed_args.github_pat)
+            write_build_compose_file()
+        else:
+            write_hub_compose_file()
+
+        download_github_repo("FactionC2/Modules-Dotnet", "{0}/modules/dotnet".format(parsed_args.faction_path),
+                             parsed_args.github_pat)
+        download_github_repo("maraudershell/Marauder", "{0}/agents/Marauder".format(parsed_args.faction_path),
+                             parsed_args.github_pat)
+
         build_faction()
 
         print_output("Waiting 30 seconds for Core to come up..")
@@ -113,7 +135,6 @@ class Setup(Command):
                     core_down = False
             else:
                 print_output("Core is not up yet. Waiting 15 more seconds..")
-
 
         create_database_migration("Initial")
         update_database()

@@ -19,12 +19,12 @@ class Clean(Command):
         parser.add_argument('--database',
                             help="Remove Faction database files",
                             action="store_true")
-        parser.add_argument('--build',
-                            help="Remove built agents and payloads",
-                            action="store_true")
-        parser.add_argument('--uploads',
-                            help="Remove files that have been uploaded to Faction",
-                            action="store_true")
+        # parser.add_argument('--build',
+        #                     help="Remove built agents and payloads",
+        #                     action="store_true")
+        # parser.add_argument('--uploads',
+        #                     help="Remove files that have been uploaded to Faction",
+        #                     action="store_true")
         return parser
 
     def take_action(self, parsed_args):
