@@ -41,7 +41,7 @@ class Setup(Command):
                             default=["Core", "Build-Service-Dotnet", "Console", "API"])
         parser.add_argument('--container-names',
                             help="Names of the containers that make up Faction",
-                            default=["faction_core_1","faction_api_1","faction_console_1","faction_build-service-dotnet_1","faction_db_1","faction_mq_1"])
+                            default=["faction_core_1","faction_api_1","faction_console_1","faction_build-dotnet_1","faction_db_1","faction_mq_1"])
         parser.add_argument('--docker-network-name',
                             help="Name of the network used in Docker for Faction Containers.",
                             default="faction-network")
