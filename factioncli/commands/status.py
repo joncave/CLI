@@ -2,7 +2,7 @@ import logging
 from cliff.lister import Lister
 from factioncli.processing.cli.printing import error_out
 from factioncli.processing.config import get_config
-from factioncli.processing.status.containers import get_container_status
+from factioncli.processing.docker.container import get_container_status
 
 
 class Status(Lister):

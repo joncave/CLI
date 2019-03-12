@@ -4,7 +4,7 @@ from subprocess import call
 from factioncli.processing.cli import log
 from factioncli.processing.config import get_config
 from factioncli.processing.cli.printing import print_output, error_out
-from factioncli.processing.docker import get_container, execute_command
+from factioncli.processing.docker.container import get_container, execute_command
 
 def create_database_migration(name, container_name='faction_core_1'):
     print_output("Creating database migration..")

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from factioncli.processing.config import get_config
-from factioncli.processing.docker import get_container_ip_address
+from factioncli.processing.docker.container import get_container_ip_address
 
 class FactionDB:
     User = None

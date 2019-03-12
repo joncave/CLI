@@ -12,7 +12,7 @@ from factioncli.processing.faction.repo import download_github_repo
 from factioncli.processing.setup.transport import create_direct_transport
 from factioncli.processing.setup.user_role import create_faction_roles
 from factioncli.processing.setup.user import create_admin_user, create_system_user, get_user_id
-from factioncli.processing.status.containers import get_container_status
+from factioncli.processing.docker.container import get_container, get_container_status, restart_container
 
 class Setup(Command):
     "Handles setting up Faction"
@@ -155,6 +155,10 @@ class Setup(Command):
         system_id = get_user_id('system')
         api_key = create_api_key(user_id=system_id, owner_id=system_id, type="Transport")
         create_direct_transport(api_key=api_key)
+
+        print_output("Restarting Core for database changes..")
+        core = get_container("faction_core_1")
+        restart_container(core)
         config = get_config()
         print_output("Setup complete! Get to hacking!!\n\nURL: {0}\nUsername: {1}\nPassword: {2}".format(config["EXTERNAL_ADDRESS"], config["ADMIN_USERNAME"], config["ADMIN_PASSWORD"]))
 
