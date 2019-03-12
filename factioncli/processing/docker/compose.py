@@ -60,6 +60,7 @@ services:
     depends_on:
       - mq
       - db
+      - console
     environment:
       - POSTGRES_HOST={5}
       - POSTGRES_DATABASE={6}
@@ -153,6 +154,7 @@ services:
     depends_on:
       - mq
       - db
+      - console
     environment:
       - POSTGRES_HOST={5}
       - POSTGRES_DATABASE={6}
@@ -187,3 +189,35 @@ services:
     with open(docker_compose_file_path, "w+") as compose_file:
         compose_file.write(docker_compose_file_contents)
 
+def write_dev_compose_file():
+    config = get_config()
+
+    docker_compose_file_path = os.path.join(config["FACTION_PATH"], "install/docker-compose.yml")
+
+    docker_compose_file_contents = """
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - {0}/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB={6}
+      - POSTGRES_USERNAME={1}
+      - POSTGRES_PASSWORD={2}
+  mq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "8080:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER={3}
+      - RABBITMQ_DEFAULT_PASS={4}
+""".format(config["FACTION_PATH"], config["POSTGRES_USERNAME"], config["POSTGRES_PASSWORD"],
+           config["RABBIT_USERNAME"], config["RABBIT_PASSWORD"], config["POSTGRES_HOST"],
+           config["POSTGRES_DATABASE"])
+
+    with open(docker_compose_file_path, "w+") as compose_file:
+        compose_file.write(docker_compose_file_contents)

@@ -5,7 +5,7 @@ from cliff.command import Command
 from factioncli.processing.cli.printing import print_output
 from factioncli.processing.config import generate_config_file, get_config
 from factioncli.processing.faction.database import update_database, create_database_migration
-from factioncli.processing.docker.compose import write_build_compose_file, write_hub_compose_file
+from factioncli.processing.docker.compose import write_build_compose_file, write_hub_compose_file, write_dev_compose_file
 from factioncli.processing.setup.api_key import create_api_key
 from factioncli.processing.faction.control import build_faction
 from factioncli.processing.faction.repo import download_github_repo
@@ -42,6 +42,9 @@ class Setup(Command):
         parser.add_argument('--container-names',
                             help="Names of the containers that make up Faction",
                             default=["faction_core_1","faction_api_1","faction_console_1","faction_build-dotnet_1","faction_db_1","faction_mq_1"])
+        parser.add_argument('--dev',
+                            help="Only build the DB and Message Queue.",
+                            action="store_true")
         parser.add_argument('--docker-network-name',
                             help="Name of the network used in Docker for Faction Containers.",
                             default="faction-network")
@@ -112,6 +115,8 @@ class Setup(Command):
             for component in parsed_args.components:
                 download_github_repo("FactionC2/{0}".format(component), "{0}/source/{1}".format(parsed_args.faction_path, component), parsed_args.github_pat)
             write_build_compose_file()
+        elif parsed_args.dev:
+            write_dev_compose_file()
         else:
             write_hub_compose_file()
 
@@ -122,22 +127,27 @@ class Setup(Command):
 
         build_faction()
 
-        print_output("Waiting 30 seconds for Core to come up..")
-        core_down = True
-        sleep(30)
-        while core_down:
-            sleep(15)
-            status = get_container_status('faction_core_1')
-            self.log.debug("Got status: {0}".format(status))
-            if status:
-                if status.status.lower() == 'running':
-                    print_output("Core is up, continuing..")
-                    core_down = False
-            else:
-                print_output("Core is not up yet. Waiting 15 more seconds..")
+        if parsed_args.dev:
+            print_output("Pausing setup. Setup Core and apply the initial database migration so that the setup process can continue")
+            input("Press enter to continue")
+        else:
+            print_output("Waiting 30 seconds for Core to come up..")
+            core_down = True
+            sleep(30)
+            while core_down:
+                status = get_container_status('faction_core_1')
+                self.log.debug("Got status: {0}".format(status))
+                if status:
+                    if status.status.lower() == 'running':
+                        print_output("Core is up, continuing..")
+                        core_down = False
+                else:
+                    print_output("Core is not up yet. Waiting 15 more seconds..")
+                    sleep(15)
 
-        create_database_migration("Initial")
-        update_database()
+            create_database_migration("Initial")
+            update_database()
+
         create_faction_roles()
         create_system_user()
         create_admin_user()
