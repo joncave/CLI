@@ -3,7 +3,7 @@
 PROJECT = 'Faction CLI'
 
 # Change docs/sphinx/conf.py too!
-VERSION = '0.1'
+VERSION = '20190312'
 
 from setuptools import setup, find_packages
 
