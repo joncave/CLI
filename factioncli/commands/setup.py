@@ -8,7 +8,7 @@ from factioncli.processing.faction.database import update_database, create_datab
 from factioncli.processing.docker.compose import write_build_compose_file, write_hub_compose_file, write_dev_compose_file
 from factioncli.processing.setup.api_key import create_api_key
 from factioncli.processing.faction.control import build_faction
-from factioncli.processing.faction.repo import download_github_repo
+from factioncli.processing.faction.repo import download_github_repo, clone_github_repo
 from factioncli.processing.setup.transport import create_direct_transport
 from factioncli.processing.setup.user_role import create_faction_roles
 from factioncli.processing.setup.user import create_admin_user, create_system_user, get_user_id
@@ -120,10 +120,8 @@ class Setup(Command):
         else:
             write_hub_compose_file()
 
-        download_github_repo("FactionC2/Modules-Dotnet", "{0}/modules/dotnet".format(parsed_args.faction_path),
-                             parsed_args.github_pat)
-        download_github_repo("maraudershell/Marauder", "{0}/agents/Marauder".format(parsed_args.faction_path),
-                             parsed_args.github_pat)
+        clone_github_repo("FactionC2/Modules-Dotnet", "{0}/modules/dotnet".format(parsed_args.faction_path))
+        clone_github_repo("maraudershell/Marauder", "{0}/agents/Marauder".format(parsed_args.faction_path))
 
         build_faction()
 
