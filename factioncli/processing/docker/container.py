@@ -70,7 +70,7 @@ def remove_container(container):
     else:
         error_out("{0} is not a container object".format(container))
 
-def execute_command(container, command):
+def execute_container_command(container, command):
     log.debug("Executing {0} against container: {1}".format(command, container.attrs["Name"]))
     if isinstance(container, Container):
         if container.status == 'running':

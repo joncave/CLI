@@ -4,13 +4,13 @@ from subprocess import call
 from factioncli.processing.cli import log
 from factioncli.processing.config import get_config
 from factioncli.processing.cli.printing import print_output, error_out
-from factioncli.processing.docker.container import get_container, execute_command
+from factioncli.processing.docker.container import get_container, execute_container_command
 
 def create_database_migration(name, container_name='faction_core_1'):
     print_output("Creating database migration..")
     core = get_container(container_name)
     name = name + "_" + secrets.token_hex(8)
-    result = execute_command(core, 'dotnet ef migrations add {0}'.format(name))
+    result = execute_container_command(core, 'dotnet ef migrations add {0}'.format(name))
     if result.exit_code != 0:
         error_out("Could create migration. Output from command: \n{0}".format(result.output))
     else:
@@ -19,7 +19,7 @@ def create_database_migration(name, container_name='faction_core_1'):
 def drop_database(container_name='faction_core_1'):
     print_output("Dropping database..")
     core = get_container(container_name)
-    result = execute_command(core, 'dotnet ef database drop --force')
+    result = execute_container_command(core, 'dotnet ef database drop --force')
     if result.exit_code != 0:
         error_out("Could not drop database. Output from command: \n{0}".format(result.output))
     else:
@@ -29,7 +29,7 @@ def drop_database(container_name='faction_core_1'):
 def update_database(container_name='faction_core_1'):
     print_output("Updating database..")
     core = get_container(container_name)
-    result = execute_command(core, 'dotnet ef database update')
+    result = execute_container_command(core, 'dotnet ef database update')
     if result.exit_code != 0:
         error_out("Could not update database. Output from command: \n{0}".format(result.output))
     else:

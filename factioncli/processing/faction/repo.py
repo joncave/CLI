@@ -4,9 +4,15 @@ import zipfile
 import tempfile
 import shutil
 from pathlib import Path
+import subprocess
 
 from factioncli.processing.cli import log
 from factioncli.processing.cli.printing import print_output
+
+def clone_github_repo(repo_name, output_dir):
+    print_output("Cloning {0} to {1}".format(repo_name, output_dir))
+    command = "git clone https://github.com/{0} {1}".format(repo_name, output_dir)
+    subprocess.call(command, shell=True)
 
 def download_github_repo(repo_name, output_dir, access_token=None):
     print_output("Downloading module: {0}".format(repo_name))
