@@ -9,7 +9,7 @@ class FactionCli(App):
     def __init__(self):
         super(FactionCli, self).__init__(
             description='Faction CLI',
-            version='0.1',
+            version='20190323',
             command_manager=CommandManager('faction.cli'),
             deferred_help=True,
             )
