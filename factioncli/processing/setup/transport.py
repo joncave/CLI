@@ -26,5 +26,5 @@ def create_direct_transport(name="DIRECT", description="DIRECT Transport", guid=
     if not api_key:
         error_out("No API Key included in request")
 
-    configuration = '{"ApiUrl":"' + config['EXTERNAL_ADDRESS'] + '",ApiKeyName":"' + api_key['Name'] + '","ApiSecret":"' + api_key['Token'] +'"}'
+    configuration = '{"ApiUrl":"' + config['EXTERNAL_ADDRESS'] + '","ApiKeyName":"' + api_key['Name'] + '","ApiSecret":"' + api_key['Token'] +'"}'
     create_transport(name, description, guid, api_key["Id"], configuration)
