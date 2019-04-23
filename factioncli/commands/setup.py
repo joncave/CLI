@@ -12,7 +12,7 @@ from factioncli.processing.faction.repo import download_github_repo, clone_githu
 from factioncli.processing.setup.transport import create_direct_transport
 from factioncli.processing.setup.user_role import create_faction_roles
 from factioncli.processing.setup.user import create_admin_user, create_system_user, get_user_id
-from factioncli.processing.docker.container import get_container, get_container_status, restart_container
+from factioncli.processing.docker.container import get_container, get_container_status, restart_container, get_container_ip_address
 
 class Setup(Command):
     "Handles setting up Faction"
@@ -126,8 +126,15 @@ class Setup(Command):
         build_faction()
 
         if parsed_args.dev:
-            print_output("Pausing setup. Setup Core and apply the initial database migration so that the setup process can continue")
-            input("Press enter to continue")
+            print_output("Pausing setup, you need to do stuff.")
+            print("Add the following to your hosts file: ")
+            print("127.0.0.1 api")
+            print("127.0.0.1 db")
+            print("127.0.0.1 mq\n")
+            print("Run the following commands from the Faction Core directory: ")
+            print("1.  dotnet ef migration add 'Initial' (You only have to do this once, unless you change the db schema)")
+            print("2.  dotnet ef database update\n")
+            input("Press enter to continue setup..")
         else:
             print_output("Waiting 30 seconds for Core to come up..")
             core_down = True
@@ -154,9 +161,10 @@ class Setup(Command):
         api_key = create_api_key(user_id=system_id, owner_id=system_id, type="Transport")
         create_direct_transport(api_key=api_key)
 
-        print_output("Restarting Core for database changes..")
-        core = get_container("faction_core_1")
-        restart_container(core)
+        if parsed_args.dev == None or parsed_args.dev == False:
+            print_output("Restarting Core for database changes..")
+            core = get_container("faction_core_1")
+            restart_container(core)
         config = get_config()
         print_output("Setup complete! Get to hacking!!\n\nURL: {0}\nUsername: {1}\nPassword: {2}".format(config["EXTERNAL_ADDRESS"], config["ADMIN_USERNAME"], config["ADMIN_PASSWORD"]))
 
