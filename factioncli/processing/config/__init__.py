@@ -10,6 +10,7 @@ from factioncli.processing.cli.printing import print_output
 
 config_file_path = '/opt/faction/global/config.json'
 
+
 def get_config():
     log.debug("Loading Config..")
     config = dict()
@@ -18,6 +19,34 @@ def get_config():
             config = json.load(f)
     return config
 
+
+def get_passwords():
+    config = get_config()
+    log.debug("Got Config, pulling passwords")
+    admin_creds = (
+        "Admin",
+        config["ADMIN_USERNAME"],
+        config["ADMIN_PASSWORD"]
+    )
+    log.debug("ADMIN: {}".format(admin_creds))
+
+    postgres_creds = (
+        "PostgreSQL",
+        config["POSTGRES_USERNAME"],
+        config["POSTGRES_PASSWORD"]
+    )
+    log.debug("POSTGRES: {}".format(postgres_creds))
+
+    rabbit_creds = (
+        "RabbitMQ",
+        config["RABBIT_USERNAME"],
+        config["RABBIT_PASSWORD"]
+    )
+    log.debug("RABBIT: {}".format(rabbit_creds))
+
+    return admin_creds, postgres_creds, rabbit_creds
+
+
 def write_config(config):
     print_output("Writing Faction config file..")
     config_dir = os.path.dirname(config_file_path)
@@ -25,6 +54,7 @@ def write_config(config):
     path.mkdir(parents=True, exist_ok=True)
     with open(config_file_path, 'wb+') as f:
         json.dump(config, codecs.getwriter('utf-8')(f), ensure_ascii=False, indent=2, sort_keys=True)
+
 
 def generate_config_file(admin_username,
                          admin_password,
