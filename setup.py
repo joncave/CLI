@@ -48,6 +48,7 @@ setup(
             'clean = factioncli.commands.clean:Clean',
             'status = factioncli.commands.status:Status',
             'new = factioncli.commands.new:New',
+            'log = factioncli.commands.log:Log',
             'credentials = factioncli.commands.credentials:Credentials'
         ]
     },
