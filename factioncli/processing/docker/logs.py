@@ -1,7 +1,9 @@
 import logging
+import os
+from factioncli.processing.config import get_config
 from factioncli.processing.cli import log
 
-def get_logs(container_name=None, follow=false):
+def get_logs(container_name=None, follow=False):
     config = get_config()
     install_path = os.path.join(config["FACTION_PATH"], "install/")
 
