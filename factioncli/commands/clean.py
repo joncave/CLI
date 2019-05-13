@@ -3,11 +3,11 @@ from cliff.command import Command
 from factioncli.processing.cli.printing import print_output
 from factioncli.processing.faction.control import clean_faction
 from factioncli.processing.faction.database import remove_database_files
-from factioncli.processing.faction.filesystem import remove_agenttype_files, remove_uploads
+from factioncli.processing.faction.filesystem import remove_agenttype_files, remove_uploads, remove_modules
 
 
 class Clean(Command):
-    "Clean Faction data and containers"
+    """Clean Faction data and containers"""
 
     def get_parser(self, prog_name):
         parser = super(Clean, self).get_parser(prog_name)
@@ -22,6 +22,9 @@ class Clean(Command):
                             action="store_true")
         parser.add_argument('--agent-types',
                             help="Remove built agent types and built payloads",
+                            action="store_true")
+        parser.add_argument('--modules',
+                            help="Remove Faction module files",
                             action="store_true")
         parser.add_argument('--uploads',
                             help="Remove files and payloads that have been uploaded to Faction",
@@ -38,6 +41,10 @@ class Clean(Command):
         if parsed_args.agent_types or parsed_args.all:
             remove_agenttype_files()
 
+        if parsed_args.modules or parsed_args.all:
+            remove_modules()
+
         if parsed_args.uploads or parsed_args.all:
             remove_uploads()
+
 
