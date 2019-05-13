@@ -14,7 +14,7 @@ def remove_agenttype_files():
     command = "sudo su -c 'rm -rf {0}*'".format(agent_path)
     log.debug("Running: '{0}' from {1}".format(command, os.path.join(config["FACTION_PATH"])))
     call(command, cwd=os.path.join(config["FACTION_PATH"]), shell=True)
-    create_build_command = "mkdir -p {0}".format(build_path)
+    create_build_command = "sudo su -c 'mkdir -p {0}'".format(build_path)
     log.debug("Running: '{0}' from {1}".format(create_build_command, os.path.join(config["FACTION_PATH"])))
     call(create_build_command, cwd=os.path.join(config["FACTION_PATH"]), shell=True)
 
