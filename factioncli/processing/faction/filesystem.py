@@ -18,11 +18,21 @@ def remove_agenttype_files():
     log.debug("Running: '{0}' from {1}".format(create_build_command, os.path.join(config["FACTION_PATH"])))
     call(create_build_command, cwd=os.path.join(config["FACTION_PATH"]), shell=True)
 
+
 def remove_builds():
     print_output("Removing agent build files..")
     config = get_config()
     build_path = os.path.join(config["FACTION_PATH"], "agents/build")
     command = "sudo su -c 'rm -rf {0}*'".format(build_path)
+    log.debug("Running: '{0}' from {1}".format(command, os.path.join(config["FACTION_PATH"])))
+    call(command, cwd=os.path.join(config["FACTION_PATH"]), shell=True)
+
+
+def remove_modules():
+    print_output("Removing modules..")
+    config = get_config()
+    modules_path = os.path.join(config["FACTION_PATH"], "modules/")
+    command = "sudo su -c 'rm -rf {0}*'".format(modules_path)
     log.debug("Running: '{0}' from {1}".format(command, os.path.join(config["FACTION_PATH"])))
     call(command, cwd=os.path.join(config["FACTION_PATH"]), shell=True)
 
