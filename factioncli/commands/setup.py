@@ -112,7 +112,7 @@ class Setup(Command):
                              system_password=parsed_args.system_password)
 
         if parsed_args.external_address:
-            if not parsed_args.external_address.startswtih('http://') or not parsed_args.external_address.startswtih('https://'):
+            if not parsed_args.external_address.startswith('http://') or not parsed_args.external_address.startswith('https://'):
                 error_out('Setup failed. --external-address argument must begin with http:// or https://')
 
         if parsed_args.build:
