@@ -2,7 +2,7 @@ import logging
 from time import sleep
 
 from cliff.command import Command
-from factioncli.processing.cli.printing import print_output
+from factioncli.processing.cli.printing import print_output, error_out
 from factioncli.processing.config import generate_config_file, get_config
 from factioncli.processing.faction.database import update_database, create_database_migration
 from factioncli.processing.docker.compose import write_build_compose_file, write_hub_compose_file, write_dev_compose_file
@@ -110,6 +110,10 @@ class Setup(Command):
                              rabbit_password=parsed_args.rabbit_password,
                              system_username=parsed_args.system_username,
                              system_password=parsed_args.system_password)
+
+        if parsed_args.external_address:
+            if not parsed_args.external_address.startswith('http://') or not parsed_args.external_address.startswith('https://'):
+                error_out('Setup failed. --external-address argument must begin with http:// or https://')
 
         if parsed_args.build:
             for component in parsed_args.components:
