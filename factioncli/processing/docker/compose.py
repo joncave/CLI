@@ -29,7 +29,7 @@ services:
       - RABBITMQ_DEFAULT_USER={3}
       - RABBITMQ_DEFAULT_PASS={4}
   console:
-    build: ../services/console
+    build: ../source/Console
     ports:
       - "{8}:443"
     depends_on:
@@ -37,7 +37,7 @@ services:
     volumes:
       - {0}/certs:/opt/faction/certs
   api:
-    build: ../source/api
+    build: ../source/API
     depends_on:
       - mq
       - db
@@ -56,7 +56,7 @@ services:
       - RABBIT_USERNAME={3}
       - RABBIT_PASSWORD={4}
   core:
-    build: ../source/core
+    build: ../source/Core
     depends_on:
       - mq
       - db
@@ -72,7 +72,7 @@ services:
       - SYSTEM_USERNAME={11}
       - SYSTEM_PASSWORD={12}
   build-server-dotnet:
-    build: ../source/build-server-dotnet
+    build: ../source/Build-Service-Dotnet
     depends_on:
       - core
       - api

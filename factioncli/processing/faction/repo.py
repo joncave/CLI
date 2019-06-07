@@ -14,7 +14,7 @@ def clone_github_repo(repo_name, output_dir):
     command = "git clone https://github.com/{0} {1}".format(repo_name, output_dir)
     subprocess.call(command, shell=True)
 
-def download_github_repo(repo_name, output_dir, access_token=None):
+def download_github_repo(repo_name, output_dir, alone_dir, access_token=None):
     print_output("Downloading module: {0}".format(repo_name))
     log.debug("Access Token: {0}".format(access_token))
     url = "https://api.github.com/repos/{0}/zipball".format(repo_name)
@@ -37,12 +37,12 @@ def download_github_repo(repo_name, output_dir, access_token=None):
     print_output("Opening Zip File {0}".format(temporary_zip.name))
     zip_ref = zipfile.ZipFile(temporary_zip.name, 'r')
 
-    log.debug("Extracting Zip")
-    print_output("Extracting Zip File {0}".format(temporary_zip.name))
-
     temporary_dir = tempfile.mkdtemp()
     log.debug("Creating Temporary Dir: {0}".format(temporary_dir))
     print_output("Creating Temporary Dir: {0}".format(temporary_dir))
+
+    log.debug("Extracting Zip")
+    print_output("Extracting Zip File {0}".format(temporary_zip.name))
     zip_ref.extractall(temporary_dir)
 
     log.debug("Buildling source folder")
@@ -67,7 +67,7 @@ def download_github_repo(repo_name, output_dir, access_token=None):
         print_output("Cleaning out {0}".format(output_dir))
         shutil.rmtree(output_dir, ignore_errors=True)
 
-    path.mkdir(parents=True, exist_ok=True)
+    # path.mkdir(parents=True, exist_ok=True)
 
     module_files = os.listdir(source_path)
     print_output("Moving files to {0}".format(output_dir))
