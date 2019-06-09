@@ -9,6 +9,7 @@ from factioncli.processing.docker.compose import write_build_compose_file, write
 from factioncli.processing.setup.api_key import create_api_key
 from factioncli.processing.faction.control import build_faction
 from factioncli.processing.faction.repo import download_github_repo, clone_github_repo
+from factioncli.processing.setup.networking import get_ip_addresses
 from factioncli.processing.setup.transport import create_direct_transport
 from factioncli.processing.setup.user_role import create_faction_roles
 from factioncli.processing.setup.user import create_admin_user, create_system_user, get_user_id
@@ -91,6 +92,21 @@ class Setup(Command):
 
     def take_action(self, parsed_args):
         print_output("Setup started..")
+
+        if parsed_args.external_address:
+            if not (parsed_args.external_address.startswith("http://") or parsed_args.external_address.startswith("https://")):
+                error_out("Setup failed. --external-address argument must begin with http:// or https://")
+        else:
+            ip_options = get_ip_addresses()
+            while(True):
+                print_output("Available NICs : IP Addresses")
+                for key, value in ip_options.items():
+                    print(key, " : ", value)
+                selection = input("Please select a NIC that corresponds to the ip address you wish to use: ")
+                if selection in ip_options:
+                    break
+            parsed_args.external_address = "https://" + ip_options[selection]
+
         generate_config_file(admin_username=parsed_args.admin_username,
                              admin_password=parsed_args.admin_password,
                              api_upload_dir=parsed_args.api_upload_dir,
@@ -110,10 +126,6 @@ class Setup(Command):
                              rabbit_password=parsed_args.rabbit_password,
                              system_username=parsed_args.system_username,
                              system_password=parsed_args.system_password)
-
-        if parsed_args.external_address:
-            if not parsed_args.external_address.startswith('http://') or not parsed_args.external_address.startswith('https://'):
-                error_out('Setup failed. --external-address argument must begin with http:// or https://')
 
         if parsed_args.build:
             for component in parsed_args.components:
