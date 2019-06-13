@@ -71,7 +71,7 @@ services:
       - RABBIT_PASSWORD={4}
       - SYSTEM_USERNAME={11}
       - SYSTEM_PASSWORD={12}
-  build-server-dotnet:
+  build-dotnet:
     build: ../source/Build-Service-Dotnet
     depends_on:
       - core
