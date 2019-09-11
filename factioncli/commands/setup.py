@@ -129,15 +129,17 @@ class Setup(Command):
 
         if parsed_args.build:
             for component in parsed_args.components:
-                download_github_repo("FactionC2/{0}".format(component), "{0}/source/{1}".format(parsed_args.faction_path, component), component, parsed_args.github_pat)
+                download_github_repo("FactionC2/{0}".format(component),
+                                     "{0}/source/{1}".format(parsed_args.faction_path, component),
+                                     component, parsed_args.github_pat)
             write_build_compose_file()
         elif parsed_args.dev:
             write_dev_compose_file()
         else:
             write_hub_compose_file()
 
-        clone_github_repo("FactionC2/Modules-Dotnet", "{0}/modules/dotnet".format(parsed_args.faction_path))
-        clone_github_repo("maraudershell/Marauder", "{0}/agents/Marauder".format(parsed_args.faction_path))
+        clone_github_repo("master", "FactionC2/Modules-Dotnet", "{0}/modules/dotnet".format(parsed_args.faction_path))
+        clone_github_repo("master", "maraudershell/Marauder", "{0}/agents/Marauder".format(parsed_args.faction_path))
 
         build_faction()
 

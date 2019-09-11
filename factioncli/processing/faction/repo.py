@@ -9,10 +9,12 @@ import subprocess
 from factioncli.processing.cli import log
 from factioncli.processing.cli.printing import print_output
 
-def clone_github_repo(repo_name, output_dir):
+
+def clone_github_repo(branch, repo_name, output_dir):
     print_output("Cloning {0} to {1}".format(repo_name, output_dir))
-    command = "git clone https://github.com/{0} {1}".format(repo_name, output_dir)
+    command = "git clone --single-branch --branch {0} https://github.com/{1} {2}".format(branch, repo_name, output_dir)
     subprocess.call(command, shell=True)
+
 
 def download_github_repo(repo_name, output_dir, alone_dir, access_token=None):
     print_output("Downloading module: {0}".format(repo_name))
