@@ -88,6 +88,12 @@ class Setup(Command):
         parser.add_argument('--postgres-password',
                             help="Password for Postgres. If not specified, a random password will be generated",
                             default=None)
+        parser.add_argument('--log-file-size',
+                            help="Size to make log files before being archived.",
+                            default="250m")
+        parser.add_argument('--log-file-number',
+                            help="Number of log files to archive before rolling over.",
+                            default="5")
         return parser
 
     def take_action(self, parsed_args):
@@ -125,7 +131,9 @@ class Setup(Command):
                              rabbit_username=parsed_args.rabbit_username,
                              rabbit_password=parsed_args.rabbit_password,
                              system_username=parsed_args.system_username,
-                             system_password=parsed_args.system_password)
+                             system_password=parsed_args.system_password,
+                             log_file_size=parsed_args.log_file_size,
+                             log_file_number=parsed_args.log_file_number)
 
         if parsed_args.build:
             for component in parsed_args.components:
