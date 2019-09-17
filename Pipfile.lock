@@ -93,10 +93,18 @@
         },
         "cmd2": {
             "hashes": [
-                "sha256:145cb677ebd0e3cae546ab81c30f6c25e0b08ba0f1071df854d53707ea792633",
-                "sha256:ce779b8bcb6aab05569d6c728eaa093c442bb7478a4998f23f1339e845a33090"
+                "sha256:4b78379d53aff811d1deac720bbe71661769822a5fb2d830cd730656d180fb3d",
+                "sha256:afebd649dda771b1de893e8df0a5f6085da5f0dcf7f63e18b247b3284f9365ce"
             ],
-            "version": "==0.8.9"
+            "markers": "python_version >= '3.0'",
+            "version": "==0.9.16"
+        },
+        "colorama": {
+            "hashes": [
+                "sha256:05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d",
+                "sha256:f8ac84de7840f5b9c4e3347b3c1eaa50f7e49c2b07596221daec5edaabbd7c48"
+            ],
+            "version": "==0.4.1"
         },
         "docker": {
             "hashes": [
