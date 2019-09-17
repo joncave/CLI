@@ -75,6 +75,8 @@ def generate_config_file(admin_username,
                          rabbit_password,
                          system_username,
                          system_password,
+                         log_file_size,
+                         log_file_number
                          ):
 
     if not flask_secret:
@@ -118,7 +120,9 @@ def generate_config_file(admin_username,
         "POSTGRES_HOST": postgres_host,
         "POSTGRES_DATABASE": postgres_database,
         "POSTGRES_USERNAME": postgres_username,
-        "POSTGRES_PASSWORD": postgres_password
+        "POSTGRES_PASSWORD": postgres_password,
+        "LOG_FILE_SIZE": log_file_size,
+        "LOG_FILE_NUMBER": log_file_number
     })
 
     write_config(config)
