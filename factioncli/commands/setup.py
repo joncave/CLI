@@ -31,33 +31,40 @@ class Setup(Command):
         parser.add_argument('--api-upload-dir',
                             help="Directory on the API container where uploads are stored. Changing this hasn't been tested and will probably break stuff.",
                             default="/opt/faction/uploads")
-        parser.add_argument('--build',
+        parser.add_argument('--build-for-dev-environment',
+                            help="Only build the DB and Message Queue.",
+                            action="store_true")
+        parser.add_argument('--build-from-source',
                             help="Build Faction from source instead of pulling images from Docker Hub",
                             action="store_true")
-        parser.add_argument('--console-port',
-                            help="Port that the console will listen on",
-                            default=443)
+        parser.add_argument('--build-from-source',
+                            help="Build Faction from source instead of pulling images from Docker Hub",
+                            action="store_true")
+        parser.add_argument('--release',
+                            help="Whether to use stable or development releases",
+                            choices=["stable", "development"],
+                            default="stable")
         parser.add_argument('--components',
                             help="Names of the components that make up Faction",
                             default=["Core", "Build-Service-Dotnet", "Console", "API"])
+        parser.add_argument('--console-port',
+                            help="Port that the console will listen on",
+                            default=443)
         parser.add_argument('--container-names',
                             help="Names of the containers that make up Faction",
                             default=["faction_core_1","faction_api_1","faction_console_1","faction_build-dotnet_1","faction_db_1","faction_mq_1"])
-        parser.add_argument('--dev',
-                            help="Only build the DB and Message Queue.",
-                            action="store_true")
         parser.add_argument('--docker-network-name',
                             help="Name of the network used in Docker for Faction Containers.",
                             default="faction-network")
         parser.add_argument('--external-address',
                             help="URL for Faction. If not specified, the public ip address of this host will be used in the format of 'https://<ip_address>'",
                             default=None)
-        parser.add_argument('--flask-secret',
-                            help="Secret used by API for various things. Default is to generate a random secret.",
-                            default=None)
         parser.add_argument('--faction-path',
                             help="Faction install path. Changing this hasn't been tested. It will probably break stuff.",
                             default="/opt/faction")
+        parser.add_argument('--flask-secret',
+                            help="Secret used by API for various things. Default is to generate a random secret.",
+                            default=None)
         parser.add_argument('--github-pat',
                             help="Github Personal Access Token. Used to download stuff from private repos",
                             default=None)
@@ -98,7 +105,7 @@ class Setup(Command):
                 error_out("Setup failed. --external-address argument must begin with http:// or https://")
         else:
             ip_options = get_ip_addresses()
-            while(True):
+            while True:
                 print_output("Available NICs : IP Addresses")
                 for key, value in ip_options.items():
                     print(key, " : ", value)
@@ -127,23 +134,30 @@ class Setup(Command):
                              system_username=parsed_args.system_username,
                              system_password=parsed_args.system_password)
 
-        if parsed_args.build:
+        docker_tag = "latest"
+        github_repo = "master"
+
+        if parsed_args.release == "development":
+            docker_tag = "development"
+            github_repo = "development"
+
+        if parsed_args.build_from_source:
             for component in parsed_args.components:
                 download_github_repo("FactionC2/{0}".format(component),
                                      "{0}/source/{1}".format(parsed_args.faction_path, component),
                                      component, parsed_args.github_pat)
             write_build_compose_file()
-        elif parsed_args.dev:
+        elif parsed_args.build_for_dev_environment:
             write_dev_compose_file()
         else:
-            write_hub_compose_file()
+            write_hub_compose_file(docker_tag)
 
-        clone_github_repo("master", "FactionC2/Modules-Dotnet", "{0}/modules/dotnet".format(parsed_args.faction_path))
-        clone_github_repo("master", "maraudershell/Marauder", "{0}/agents/Marauder".format(parsed_args.faction_path))
+        clone_github_repo(github_repo, "FactionC2/Modules-Dotnet", "{0}/modules/dotnet".format(parsed_args.faction_path))
+        clone_github_repo(github_repo, "maraudershell/Marauder", "{0}/agents/Marauder".format(parsed_args.faction_path))
 
         build_faction()
 
-        if parsed_args.dev:
+        if parsed_args.build_for_dev_environment:
             print_output("Pausing setup, you need to do stuff.")
             print("Add the following to your hosts file: ")
             print("127.0.0.1 api")
@@ -179,7 +193,7 @@ class Setup(Command):
         api_key = create_api_key(user_id=system_id, owner_id=system_id, type="Transport")
         create_direct_transport(api_key=api_key)
 
-        if parsed_args.dev == None or parsed_args.dev == False:
+        if parsed_args.build_for_dev_environment is None or parsed_args.build_for_dev_environment is False:
             print_output("Restarting Core for database changes..")
             core = get_container("faction_core_1")
             restart_container(core)
