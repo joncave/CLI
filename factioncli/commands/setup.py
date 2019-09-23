@@ -120,7 +120,7 @@ class Setup(Command):
         generate_config_file(admin_username=parsed_args.admin_username,
                              admin_password=parsed_args.admin_password,
                              api_upload_dir=parsed_args.api_upload_dir,
-                             build=parsed_args.build,
+                             build=parsed_args.build_from_source,
                              console_port=parsed_args.console_port,
                              containers=parsed_args.container_names,
                              docker_network_name=parsed_args.docker_network_name,
