@@ -37,9 +37,6 @@ class Setup(Command):
         parser.add_argument('--build-from-source',
                             help="Build Faction from source instead of pulling images from Docker Hub",
                             action="store_true")
-        parser.add_argument('--build-from-source',
-                            help="Build Faction from source instead of pulling images from Docker Hub",
-                            action="store_true")
         parser.add_argument('--release',
                             help="Whether to use stable or development releases",
                             choices=["stable", "development"],
