@@ -143,7 +143,7 @@ class Setup(Command):
         github_repo = "master"
 
         if parsed_args.release == "development":
-            docker_tag = "development"
+            docker_tag = "dev"
             github_repo = "development"
 
         if parsed_args.build_from_source:
