@@ -19,7 +19,7 @@ def create_database_migration(name, container_name='faction_core_1'):
 def drop_database(container_name='faction_core_1'):
     print_output("Dropping database..")
     core = get_container(container_name)
-    result = execute_container_command(core, 'dotnet ef database drop --force')
+    result = execute_container_command(core, 'rm -rf /app/obj && rm -rf /app/bin && dotnet ef database drop --force')
     if result.exit_code != 0:
         error_out("Could not drop database. Output from command: \n{0}".format(result.output))
     else:

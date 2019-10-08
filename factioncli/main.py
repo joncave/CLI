@@ -3,13 +3,15 @@ import sys
 from cliff.app import App
 from cliff.commandmanager import CommandManager
 
+VERSION = '2019.10.04'
+
 
 class FactionCli(App):
 
     def __init__(self):
         super(FactionCli, self).__init__(
             description='Faction CLI',
-            version='2019.09.23',
+            version=VERSION,
             command_manager=CommandManager('faction.cli'),
             deferred_help=True,
             )

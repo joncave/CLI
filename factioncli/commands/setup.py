@@ -203,5 +203,5 @@ class Setup(Command):
             core = get_container("faction_core_1")
             restart_container(core)
         config = get_config()
-        print_output("Setup complete! Get to hacking!!\n\nURL: {0}\nUsername: {1}\nPassword: {2}".format(config["EXTERNAL_ADDRESS"], config["ADMIN_USERNAME"], config["ADMIN_PASSWORD"]))
+        print_output("Setup complete! Happy hacking!!\n\nURL: {0}\nUsername: {1}\nPassword: {2}".format(config["EXTERNAL_ADDRESS"], config["ADMIN_USERNAME"], config["ADMIN_PASSWORD"]))
 
