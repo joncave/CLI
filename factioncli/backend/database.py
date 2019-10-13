@@ -50,22 +50,27 @@ class FactionDB:
         print_output("FactionDB: Seeding tables with Id stuff")
 
         class User(self.base):
+            __tablename__ = "User"
             # Override id column, the type must match. Automap handles the rest.
             Id = Column(Integer, primary_key=True)
 
         class UserRole(self.base):
+            __tablename__ = "UserRole"
             # Override id column, the type must match. Automap handles the rest.
             Id = Column(Integer, primary_key=True)
 
         class Agent(self.base):
+            __tablename__ = "Agent"
             # Override id column, the type must match. Automap handles the rest.
             Id = Column(Integer, primary_key=True)
 
         class Transport(self.base):
+            __tablename__ = "Transport"
             # Override id column, the type must match. Automap handles the rest.
             Id = Column(Integer, primary_key=True)
 
         class ApiKey(self.base):
+            __tablename__ = "ApiKey"
             # Override id column, the type must match. Automap handles the rest.
             Id = Column(Integer, primary_key=True)
 
