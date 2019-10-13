@@ -187,8 +187,8 @@ class Setup(Command):
                     print_output("Core is not up yet. Waiting 15 more seconds..")
                     sleep(15)
 
-        #     create_database_migration("Initial")
-        #     update_database()
+            create_database_migration("Initial")
+            update_database()
 
         create_faction_roles()
         create_system_user()
@@ -198,10 +198,10 @@ class Setup(Command):
         api_key = create_api_key(user_id=system_id, owner_id=system_id, type="Transport")
         create_direct_transport(api_key=api_key)
 
-        # if parsed_args.build_for_dev_environment is None or parsed_args.build_for_dev_environment is False:
-        #     print_output("Restarting Core for database changes..")
-        #     core = get_container("faction_core_1")
-        #     restart_container(core)
+        if parsed_args.build_for_dev_environment is None or parsed_args.build_for_dev_environment is False:
+            print_output("Restarting Core for database changes..")
+            core = get_container("faction_core_1")
+            restart_container(core)
         config = get_config()
         print_output("Setup complete! Happy hacking!!\n\nURL: {0}\nUsername: {1}\nPassword: {2}".format(config["EXTERNAL_ADDRESS"], config["ADMIN_USERNAME"], config["ADMIN_PASSWORD"]))
 
