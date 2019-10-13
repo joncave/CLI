@@ -1,0 +1,3 @@
+[submodule "factionpy"]
+	path = factionpy
+	url = git@github.com:FactionC2/FactionPy.git
