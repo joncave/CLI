@@ -172,23 +172,23 @@ class Setup(Command):
             print("1.  dotnet ef migration add 'Initial' (You only have to do this once, unless you change the db schema)")
             print("2.  dotnet ef database update\n")
             input("Press enter to continue setup..")
-        else:
-            print_output("Waiting 30 seconds for Core to come up..")
-            core_down = True
-            sleep(30)
-            while core_down:
-                status = get_container_status('faction_core_1')
-                self.log.debug("Got status: {0}".format(status))
-                if status:
-                    if status.status.lower() == 'running':
-                        print_output("Core is up, continuing..")
-                        core_down = False
-                else:
-                    print_output("Core is not up yet. Waiting 15 more seconds..")
-                    sleep(15)
-
-            #create_database_migration("Initial")
-            #update_database()
+        # else:
+        #     print_output("Waiting 30 seconds for Core to come up..")
+        #     core_down = True
+        #     sleep(30)
+        #     while core_down:
+        #         status = get_container_status('faction_core_1')
+        #         self.log.debug("Got status: {0}".format(status))
+        #         if status:
+        #             if status.status.lower() == 'running':
+        #                 print_output("Core is up, continuing..")
+        #                 core_down = False
+        #         else:
+        #             print_output("Core is not up yet. Waiting 15 more seconds..")
+        #             sleep(15)
+        #
+        #     create_database_migration("Initial")
+        #     update_database()
 
         create_faction_roles()
         create_system_user()
@@ -198,10 +198,10 @@ class Setup(Command):
         api_key = create_api_key(user_id=system_id, owner_id=system_id, type="Transport")
         create_direct_transport(api_key=api_key)
 
-        if parsed_args.build_for_dev_environment is None or parsed_args.build_for_dev_environment is False:
-            print_output("Restarting Core for database changes..")
-            core = get_container("faction_core_1")
-            restart_container(core)
+        # if parsed_args.build_for_dev_environment is None or parsed_args.build_for_dev_environment is False:
+        #     print_output("Restarting Core for database changes..")
+        #     core = get_container("faction_core_1")
+        #     restart_container(core)
         config = get_config()
         print_output("Setup complete! Happy hacking!!\n\nURL: {0}\nUsername: {1}\nPassword: {2}".format(config["EXTERNAL_ADDRESS"], config["ADMIN_USERNAME"], config["ADMIN_PASSWORD"]))
 
