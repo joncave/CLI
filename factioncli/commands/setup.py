@@ -187,8 +187,8 @@ class Setup(Command):
                     print_output("Core is not up yet. Waiting 15 more seconds..")
                     sleep(15)
 
-            create_database_migration("Initial")
-            update_database()
+            #create_database_migration("Initial")
+            #update_database()
 
         create_faction_roles()
         create_system_user()
