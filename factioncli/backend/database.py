@@ -1,6 +1,6 @@
 from sqlalchemy.ext.automap import automap_base, generate_relationship, name_for_collection_relationship
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Integer, Column
 from sqlalchemy.engine.url import URL
 from factioncli.processing.config import get_config
 from factioncli.processing.docker.container import get_container_ip_address
@@ -46,6 +46,29 @@ class FactionDB:
         self.engine = create_engine(db_url)
         print_output("FactionDB: Assigning base")
         self.base = automap_base()
+
+        print_output("FactionDB: Seeding tables with Id stuff")
+
+        class User(self.base):
+            # Override id column, the type must match. Automap handles the rest.
+            Id = Column(Integer, primary_key=True)
+
+        class UserRole(self.base):
+            # Override id column, the type must match. Automap handles the rest.
+            Id = Column(Integer, primary_key=True)
+
+        class Agent(self.base):
+            # Override id column, the type must match. Automap handles the rest.
+            Id = Column(Integer, primary_key=True)
+
+        class Transport(self.base):
+            # Override id column, the type must match. Automap handles the rest.
+            Id = Column(Integer, primary_key=True)
+
+        class ApiKey(self.base):
+            # Override id column, the type must match. Automap handles the rest.
+            Id = Column(Integer, primary_key=True)
+
         print_output("FactionDB: Running base.prepare()")
         self.base.prepare(self.engine,
                           reflect=True,

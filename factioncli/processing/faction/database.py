@@ -21,7 +21,7 @@ def _cleanup_build_artifacts(container_name='faction_core_1'):
         success = False
     if success:
         print_output("Migration created.")
-        
+
 
 def create_database_migration(name, container_name='faction_core_1'):
     _cleanup_build_artifacts()
