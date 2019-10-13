@@ -172,21 +172,21 @@ class Setup(Command):
             print("1.  dotnet ef migration add 'Initial' (You only have to do this once, unless you change the db schema)")
             print("2.  dotnet ef database update\n")
             input("Press enter to continue setup..")
-        # else:
-        #     print_output("Waiting 30 seconds for Core to come up..")
-        #     core_down = True
-        #     sleep(30)
-        #     while core_down:
-        #         status = get_container_status('faction_core_1')
-        #         self.log.debug("Got status: {0}".format(status))
-        #         if status:
-        #             if status.status.lower() == 'running':
-        #                 print_output("Core is up, continuing..")
-        #                 core_down = False
-        #         else:
-        #             print_output("Core is not up yet. Waiting 15 more seconds..")
-        #             sleep(15)
-        #
+        else:
+            print_output("Waiting 30 seconds for Core to come up..")
+            core_down = True
+            sleep(30)
+            while core_down:
+                status = get_container_status('faction_core_1')
+                self.log.debug("Got status: {0}".format(status))
+                if status:
+                    if status.status.lower() == 'running':
+                        print_output("Core is up, continuing..")
+                        core_down = False
+                else:
+                    print_output("Core is not up yet. Waiting 15 more seconds..")
+                    sleep(15)
+
         #     create_database_migration("Initial")
         #     update_database()
 
