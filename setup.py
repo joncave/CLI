@@ -30,7 +30,7 @@ setup(
     scripts=[],
 
     provides=[],
-    install_requires=['cliff', 'docker', 'sqlalchemy', 'requests', 'docker', 'bcrypt', 'psycopg2-binary'],
+    install_requires=['cliff', 'docker', 'sqlalchemy', 'requests', 'docker', 'bcrypt', 'psycopg2-binary', 'factionpy'],
     namespace_packages=[],
     packages=find_packages(),
     include_package_data=True,
