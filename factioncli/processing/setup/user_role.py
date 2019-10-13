@@ -4,10 +4,12 @@ from factioncli.processing.cli.printing import error_out, print_output
 
 
 def create_role(name):
+    print_output("In create_role, creating FactionDB..")
     faction_db = FactionDB()
     print_output("Creating UserRole: {0}".format(name))
     faction_db.session.add(faction_db.UserRole(Name=name.lower()))
     faction_db.session.commit()
+
 
 def get_role_id(name):
     faction_db = FactionDB()
@@ -19,6 +21,9 @@ def get_role_id(name):
     else:
         error_out("Could not find role named: {0}".format(name))
 
+
 def create_faction_roles(roles=("system", "admin", "operator", "readonly")):
+    print_output("In create_faction_roles")
     for role in roles:
+        print_output("Running create_role({0})".format(role))
         create_role(role)

@@ -4,6 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from factioncli.processing.config import get_config
 from factioncli.processing.docker.container import get_container_ip_address
+from factioncli.processing.cli.printing import print_output
+
 
 class FactionDB:
     User = None
@@ -15,16 +17,17 @@ class FactionDB:
     session = None
 
     def __init__(self):
+        print_output("FactionDB: Pulling Config")
         CONFIG = get_config()
         db_params = {'drivername': 'postgres',
-                  'username': CONFIG['POSTGRES_USERNAME'],
-                  'password': CONFIG['POSTGRES_PASSWORD'],
-                  'host': get_container_ip_address("faction_db_1"),
-                 'database': CONFIG['POSTGRES_DATABASE']
-                  }
+                     'username': CONFIG['POSTGRES_USERNAME'],
+                     'password': CONFIG['POSTGRES_PASSWORD'],
+                     'host': get_container_ip_address("faction_db_1"),
+                     'database': CONFIG['POSTGRES_DATABASE']
+                     }
 
-        # Resolves an issue with backrefs, thanks to this stackoverflow
-        # user for answering their own question: https://stackoverflow.com/a/49515079
+        # Resolves an issue with backrefs, thanks to this stackoverflow user for answering
+        # their own question: https://stackoverflow.com/a/49515079
         def _gen_relationship(base, direction, return_fn,
                               attrname, local_cls, referred_cls, **kw):
             return generate_relationship(base, direction, return_fn,
@@ -37,19 +40,29 @@ class FactionDB:
             # if this didn't work, revert to the default behavior
             return name_for_collection_relationship(base, local_cls, referred_cls, constraint)
 
+        print_output("FactionDB: Assigning db_url")
         db_url = URL(**db_params)
+        print_output("FactionDB: Assigning engine")
         self.engine = create_engine(db_url)
+        print_output("FactionDB: Assigning base")
         self.base = automap_base()
+        print_output("FactionDB: Running base.prepare()")
         self.base.prepare(self.engine,
                           reflect=True,
                           generate_relationship=_gen_relationship,
                           name_for_collection_relationship=_name_for_collection_relationship)
+        print_output("FactionDB: Assigning session")
         self.session = Session(self.engine)
 
+        print_output("FactionDB: Assigning User")
         self.User = self.base.classes.User
+        print_output("FactionDB: Assigning UserRole")
         self.UserRole = self.base.classes.UserRole
+        print_output("FactionDB: Assigning Agent")
         self.Agent = self.base.classes.Agent
+        print_output("FactionDB: Assigning Transport")
         self.Transport = self.base.classes.Transport
+        print_output("FactionDB: Assigning ApiKey")
         self.ApiKey = self.base.classes.ApiKey
 
     def close(self):

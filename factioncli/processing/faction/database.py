@@ -15,7 +15,7 @@ def create_database_migration(name, container_name='faction_core_1'):
     if result.exit_code != 0:
         error_out("Could create migration. Output from command: \n{0}".format(result.output))
     else:
-        print_output("Database dropped.")
+        print_output("Migration created.")
 
 
 def drop_database(container_name='faction_core_1'):
