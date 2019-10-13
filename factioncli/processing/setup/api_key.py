@@ -1,11 +1,10 @@
 import bcrypt
 import secrets
 from datetime import datetime
-from factioncli.backend.database import FactionDB
 from factioncli.processing.cli.printing import print_output
 
+
 def create_api_key(user_id, owner_id, type):
-    faction_db = FactionDB()
 
     print_output("Creating API Key with type: {0}".format(type))
     name = secrets.token_urlsafe(12)
