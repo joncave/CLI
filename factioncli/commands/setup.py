@@ -6,6 +6,7 @@ from cliff.command import Command
 from factionpy.processing.user import get_user_id
 from factionpy.processing.api_key import new_api_key
 
+
 from factioncli.processing.cli.printing import print_output, error_out
 from factioncli.processing.config import generate_config_file, get_config
 from factioncli.processing.faction.database import update_database, create_database_migration
@@ -16,7 +17,7 @@ from factioncli.processing.setup.networking import get_ip_addresses
 from factioncli.processing.setup.transport import create_direct_transport
 from factioncli.processing.setup.user_role import create_faction_roles
 from factioncli.processing.setup.user import create_admin_user, create_system_user
-from factioncli.processing.docker.container import get_container, get_container_status, restart_container, get_container_ip_address
+from factioncli.processing.docker.container import get_container, get_container_status, restart_container
 
 
 class Setup(Command):
