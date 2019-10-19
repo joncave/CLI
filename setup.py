@@ -1,11 +1,20 @@
 #!/usr/bin/env python
+import os
+import sys
+from setuptools import setup, find_packages
 from factioncli.main import VERSION
+
 PROJECT = 'Faction CLI'
 
-# Change docs/sphinx/conf.py too!
+if sys.argv[-1] == 'clean':
+    if os.path.exists("./build"):
+        os.system('rm -rf ./build')
+    if os.path.exists("./dist"):
+        os.system('rm -rf ./dist')
+    if os.path.exists("./Faction_CLI.egg-info"):
+        os.system('rm -rf ./Faction_CLI.egg-info')
+    sys.exit()
 
-
-from setuptools import setup, find_packages
 
 try:
     long_description = open('README.rst', 'rt').read()

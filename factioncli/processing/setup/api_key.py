@@ -2,26 +2,16 @@ import bcrypt
 import secrets
 from datetime import datetime
 from factioncli.processing.cli.printing import print_output
+from factionpy.processing.api_key import new_api_key
 
 
-def create_api_key(user_id, owner_id, type):
+def create_api_key(user_id, owner_id, api_key_type):
 
-    print_output("Creating API Key with type: {0}".format(type))
-    name = secrets.token_urlsafe(12)
-    token = secrets.token_urlsafe(48)
-    api_key = faction_db.ApiKey(Name=name,
-                       Key=bcrypt.hashpw(token.encode('utf-8'), bcrypt.gensalt()),
-                       Created=datetime.utcnow(),
-                       UserId=user_id,
-                       OwnerId=owner_id,
-                       Enabled=True,
-                       Visible=True
-                       )
-    faction_db.session.add(api_key)
-    faction_db.session.commit()
+    print_output("Creating API Key with type: {0}".format(api_key_type))
+    key = new_api_key(api_key_type=api_key_type, user_id=user_id, owner_id=owner_id)
 
     return dict({
-        "Id": api_key.Id,
-        "Name": name,
-        "Token": token
+        "Id": key.Id,
+        "Name": key.Name,
+        "Token": key.Token
     })

@@ -2,6 +2,7 @@ import logging
 from cliff.command import Command
 from factioncli.processing.docker.logs import get_logs
 
+
 class Log(Command):
     "Handles Log Command"
 
@@ -18,4 +19,4 @@ class Log(Command):
         return parser
     
     def take_action(self, parsed_args):
-            get_logs(parsed_args.container, parsed_args.follow)
+        get_logs(parsed_args.container, parsed_args.follow)

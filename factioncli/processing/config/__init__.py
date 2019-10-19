@@ -66,6 +66,8 @@ def generate_config_file(admin_username,
                          external_address,
                          faction_path,
                          flask_secret,
+                         log_file_size,
+                         log_file_number,
                          postgres_host,
                          postgres_database,
                          postgres_username,
@@ -75,8 +77,8 @@ def generate_config_file(admin_username,
                          rabbit_password,
                          system_username,
                          system_password,
-                         log_file_size,
-                         log_file_number
+                         minio_accesskey=None,
+                         minio_secretkey=None
                          ):
 
     if not flask_secret:
@@ -94,6 +96,12 @@ def generate_config_file(admin_username,
     if not rabbit_password:
         rabbit_password = secrets.token_urlsafe(64)
 
+    if not minio_accesskey:
+        minio_accesskey = secrets.token_urlsafe(16)
+
+    if not minio_secretkey:
+        minio_secretkey = secrets.token_urlsafe(64)
+
     if not external_address:
         external_address = "https://{0}".format(requests.get("https://api.ipify.org").text)
 
@@ -108,10 +116,12 @@ def generate_config_file(admin_username,
         "BUILD": build,
         "CONSOLE_PORT": console_port,
         "CONTAINERS": containers_list,
-        "EXTERNAL_ADDRESS": external_address,
         "DOCKER_NETWORK_NAME": docker_network_name,
+        "EXTERNAL_ADDRESS": external_address,
         "FACTION_PATH": faction_path,
         "FLASK_SECRET": flask_secret,
+        "MINIO_ACCESSKEY": minio_accesskey,
+        "MINIO_SECRETKEY": minio_secretkey,
         "RABBIT_HOST": rabbit_host,
         "RABBIT_USERNAME": rabbit_username,
         "RABBIT_PASSWORD": rabbit_password,

@@ -3,10 +3,6 @@ from time import sleep
 
 from cliff.command import Command
 
-from factionpy.processing.user import get_user_id
-from factionpy.processing.api_key import new_api_key
-
-
 from factioncli.processing.cli.printing import print_output, error_out
 from factioncli.processing.config import generate_config_file, get_config
 from factioncli.processing.faction.database import update_database, create_database_migration
@@ -14,9 +10,6 @@ from factioncli.processing.docker.compose import write_build_compose_file, write
 from factioncli.processing.faction.control import build_faction
 from factioncli.processing.faction.repo import download_github_repo, clone_github_repo
 from factioncli.processing.setup.networking import get_ip_addresses
-from factioncli.processing.setup.transport import create_direct_transport
-from factioncli.processing.setup.user_role import create_faction_roles
-from factioncli.processing.setup.user import create_admin_user, create_system_user
 from factioncli.processing.docker.container import get_container, get_container_status, restart_container
 
 
@@ -195,10 +188,18 @@ class Setup(Command):
             create_database_migration("Initial")
             update_database()
 
+        # Now that the environment is up, we can import common lib
+        from factionpy.processing.user import get_user_id
+        from factionpy.processing.api_key import new_api_key
+        from factioncli.processing.setup.transport import create_direct_transport
+        from factioncli.processing.setup.user_role import create_faction_roles
+        from factioncli.processing.setup.user import create_admin_user, create_system_user
+
         create_faction_roles()
         create_system_user()
         create_admin_user()
 
+        print_output("Creating API Key for Direct Transport")
         system_id = get_user_id('system')
         api_key = new_api_key(api_key_type="Transport", user_id=system_id, owner_id=system_id)
         create_direct_transport(api_key=api_key)

@@ -3,7 +3,6 @@ from factioncli.processing.cli.printing import print_output
 
 
 def create_faction_roles(roles=("system", "admin", "operator", "readonly")):
-    print_output("In create_faction_roles")
+    print_output("Creating Faction Roles..")
     for role in roles:
-        print_output("Running create_role({0})".format(role))
         create_role(role)
