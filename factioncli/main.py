@@ -3,7 +3,7 @@ import sys
 from cliff.app import App
 from cliff.commandmanager import CommandManager
 
-VERSION = '2019.10.04'
+VERSION = '2019.10.19'
 
 
 class FactionCli(App):
