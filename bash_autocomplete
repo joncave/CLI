@@ -1,0 +1,60 @@
+_faction()
+{
+  local cur prev words
+  COMPREPLY=()
+  _get_comp_words_by_ref -n : cur prev words
+
+  # Command data:
+  cmds='clean complete credentials help log new reset restart setup start status stop'
+  cmds_clean='-h --help --all --faction --database --agent-types --modules --uploads'
+  cmds_complete='-h --help --name --shell'
+  cmds_credentials='-h --help -f --format -c --column --quote --noindent --max-width --fit-width --print-empty --sort-column'
+  cmds_help='-h --help'
+  cmds_log='-h --help -f --follow --container'
+  cmds_new='-h --help --transport-key'
+  cmds_reset='-h --help'
+  cmds_restart='-h --help'
+  cmds_setup='-h --help --admin-username --admin-password --api-upload-dir --build-for-dev-environment --build-from-source --release --components --console-port --container-names --docker-network-name --external-address --faction-path --flask-secret --github-pat --rabbit-host --rabbit-username --rabbit-password --system-username --system-password --postgres-host --postgres-database --postgres-username --postgres-password --log-file-size --log-file-number'
+  cmds_start='-h --help'
+  cmds_status='-h --help -f --format -c --column --quote --noindent --max-width --fit-width --print-empty --sort-column'
+  cmds_stop='-h --help'
+
+  dash=-
+  underscore=_
+  cmd=""
+  words[0]=""
+  completed="${cmds}"
+  for var in "${words[@]:1}"
+  do
+    if [[ ${var} == -* ]] ; then
+      break
+    fi
+    if [ -z "${cmd}" ] ; then
+      proposed="${var}"
+    else
+      proposed="${cmd}_${var}"
+    fi
+    local i="cmds_${proposed}"
+    i=${i//$dash/$underscore}
+    local comp="${!i}"
+    if [ -z "${comp}" ] ; then
+      break
+    fi
+    if [[ ${comp} == -* ]] ; then
+      if [[ ${cur} != -* ]] ; then
+        completed=""
+        break
+      fi
+    fi
+    cmd="${proposed}"
+    completed="${comp}"
+  done
+
+  if [ -z "${completed}" ] ; then
+    COMPREPLY=( $( compgen -f -- "$cur" ) $( compgen -d -- "$cur" ) )
+  else
+    COMPREPLY=( $(compgen -W "${completed}" -- ${cur}) )
+  fi
+  return 0
+}
+complete -F _faction faction

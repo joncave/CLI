@@ -1,6 +1,6 @@
 import logging
 from cliff.command import Command
-from factioncli.processing.setup.user import get_user_id
+from factionpy.processing.user import get_user_id
 from factioncli.processing.cli.printing import print_output
 from factioncli.processing.setup.api_key import create_api_key
 
