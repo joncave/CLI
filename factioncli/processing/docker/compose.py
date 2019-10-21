@@ -1,6 +1,6 @@
 import os
-import subprocess
 from factioncli.processing.config import get_config
+
 
 def write_build_compose_file():
     config = get_config()

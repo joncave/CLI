@@ -2,18 +2,16 @@ import logging
 from time import sleep
 
 from cliff.command import Command
+
 from factioncli.processing.cli.printing import print_output, error_out
 from factioncli.processing.config import generate_config_file, get_config
 from factioncli.processing.faction.database import update_database, create_database_migration
 from factioncli.processing.docker.compose import write_build_compose_file, write_hub_compose_file, write_dev_compose_file
-from factioncli.processing.setup.api_key import create_api_key
 from factioncli.processing.faction.control import build_faction
 from factioncli.processing.faction.repo import download_github_repo, clone_github_repo
 from factioncli.processing.setup.networking import get_ip_addresses
-from factioncli.processing.setup.transport import create_direct_transport
-from factioncli.processing.setup.user_role import create_faction_roles
-from factioncli.processing.setup.user import create_admin_user, create_system_user, get_user_id
-from factioncli.processing.docker.container import get_container, get_container_status, restart_container, get_container_ip_address
+from factioncli.processing.docker.container import get_container, get_container_status, restart_container
+
 
 class Setup(Command):
     "Handles setting up Faction"
@@ -190,12 +188,20 @@ class Setup(Command):
             create_database_migration("Initial")
             update_database()
 
+        # Now that the environment is up, we can import common lib
+        from factionpy.processing.user import get_user_id
+        from factionpy.processing.api_key import new_api_key
+        from factioncli.processing.setup.transport import create_direct_transport
+        from factioncli.processing.setup.user_role import create_faction_roles
+        from factioncli.processing.setup.user import create_admin_user, create_system_user
+
         create_faction_roles()
         create_system_user()
         create_admin_user()
 
+        print_output("Creating API Key for Direct Transport")
         system_id = get_user_id('system')
-        api_key = create_api_key(user_id=system_id, owner_id=system_id, type="Transport")
+        api_key = new_api_key(api_key_type="Transport", user_id=system_id, owner_id=system_id)
         create_direct_transport(api_key=api_key)
 
         if parsed_args.build_for_dev_environment is None or parsed_args.build_for_dev_environment is False:
@@ -203,5 +209,5 @@ class Setup(Command):
             core = get_container("faction_core_1")
             restart_container(core)
         config = get_config()
-        print_output("Setup complete! Get to hacking!!\n\nURL: {0}\nUsername: {1}\nPassword: {2}".format(config["EXTERNAL_ADDRESS"], config["ADMIN_USERNAME"], config["ADMIN_PASSWORD"]))
+        print_output("Setup complete! Happy hacking!!\n\nURL: {0}\nUsername: {1}\nPassword: {2}".format(config["EXTERNAL_ADDRESS"], config["ADMIN_USERNAME"], config["ADMIN_PASSWORD"]))
 
