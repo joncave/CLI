@@ -12,10 +12,9 @@ version: "3.4"
 
 x-logging: 
       &default-logging
-      driver: local
+      driver: journald
       options:
-        max-size: "{13}"
-        max-file: "{14}"
+        tag: "faction"
 
 services:
   db:
@@ -104,7 +103,7 @@ services:
            config["RABBIT_USERNAME"], config["RABBIT_PASSWORD"], config["POSTGRES_HOST"],
            config["POSTGRES_DATABASE"], config["RABBIT_HOST"], config["CONSOLE_PORT"],
            config["FLASK_SECRET"], config["API_UPLOAD_DIR"], config["SYSTEM_USERNAME"],
-           config["SYSTEM_PASSWORD"], config["LOG_FILE_SIZE"], config["LOG_FILE_NUMBER"])
+           config["SYSTEM_PASSWORD"])
 
     with open(docker_compose_file_path, "w+") as compose_file:
         compose_file.write(docker_compose_file_contents)
@@ -120,10 +119,9 @@ version: "3.4"
 
 x-logging: 
       &default-logging
-      driver: local
+      driver: journald
       options:
-        max-size: "{13}"
-        max-file: "{14}"
+        tag: "faction"
 
 services:
   db:
@@ -147,7 +145,7 @@ services:
       - RABBITMQ_DEFAULT_PASS={4}
     logging: *default-logging
   console:
-    image: faction/console:{15}
+    image: faction/console:{13}
     ports:
       - "{8}:443"
     depends_on:
@@ -156,7 +154,7 @@ services:
       - {0}/certs:/opt/faction/certs
     logging: *default-logging
   api:
-    image: faction/api:{15}
+    image: faction/api:{13}
     depends_on:
       - mq
       - db
@@ -176,7 +174,7 @@ services:
       - RABBIT_PASSWORD={4}
     logging: *default-logging
   core:
-    image: faction/core:{15}
+    image: faction/core:{13}
     depends_on:
       - mq
       - db
@@ -193,7 +191,7 @@ services:
       - SYSTEM_PASSWORD={12}
     logging: *default-logging
   build-dotnet:
-    image: faction/build-dotnet:{15}
+    image: faction/build-dotnet:{13}
     depends_on:
       - core
       - api
@@ -212,7 +210,7 @@ services:
            config["RABBIT_USERNAME"], config["RABBIT_PASSWORD"], config["POSTGRES_HOST"],
            config["POSTGRES_DATABASE"], config["RABBIT_HOST"], config["CONSOLE_PORT"],
            config["FLASK_SECRET"], config["API_UPLOAD_DIR"], config["SYSTEM_USERNAME"],
-           config["SYSTEM_PASSWORD"], config["LOG_FILE_SIZE"], config["LOG_FILE_NUMBER"],
+           config["SYSTEM_PASSWORD"]
            docker_tag)
 
     with open(docker_compose_file_path, "w+") as compose_file:
@@ -228,10 +226,10 @@ def write_dev_compose_file():
 version: "3.4"
 x-logging: 
       &default-logging
-      driver: local
+      driver: journald
       options:
-        max-size: "{7}"
-        max-file: "{8}"
+        tag: "faction"
+
 services:
   db:
     image: postgres:latest
@@ -255,7 +253,7 @@ services:
     logging: *default-logging
 """.format(config["FACTION_PATH"], config["POSTGRES_USERNAME"], config["POSTGRES_PASSWORD"],
            config["RABBIT_USERNAME"], config["RABBIT_PASSWORD"], config["POSTGRES_HOST"],
-           config["POSTGRES_DATABASE"], config["LOG_FILE_SIZE"], config["LOG_FILE_NUMBER"])
+           config["POSTGRES_DATABASE"])
 
     with open(docker_compose_file_path, "w+") as compose_file:
         compose_file.write(docker_compose_file_contents)
