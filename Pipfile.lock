@@ -87,11 +87,11 @@
         },
         "cliff": {
             "hashes": [
-                "sha256:529b0ee0d2d38c7cbbababbbe3472b43b667a5c36025ef1b6cd00851c4313849",
-                "sha256:7c73056715f3ce6622cd40f8c29032f052b9965fdf0bfc5b0b293a20f7be123b"
+                "sha256:56f638aba848ab75e8d00ec8813d27a446ee25a5162c4fe2792540d573e39d84",
+                "sha256:e3c0efdc30b5e9b166da4b4d4bd0df0585293bbb584837a64cc25a941da8fe53"
             ],
             "index": "pypi",
-            "version": "==3.1.0"
+            "version": "==3.2.0"
         },
         "cmd2": {
             "hashes": [
