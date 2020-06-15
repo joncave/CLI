@@ -14,6 +14,13 @@
         ]
     },
     "default": {
+        "attrs": {
+            "hashes": [
+                "sha256:08a96c641c3a74e44eb59afb61a24f2cb9f4d7188748e76ba4bb5edfa3cb7d1c",
+                "sha256:f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72"
+            ],
+            "version": "==19.3.0"
+        },
         "bcrypt": {
             "hashes": [
                 "sha256:0258f143f3de96b7c14f762c770f5fc56ccd72f8a1857a451c1cd9a655d9ac89",
@@ -87,18 +94,25 @@
         },
         "cliff": {
             "hashes": [
-                "sha256:56f638aba848ab75e8d00ec8813d27a446ee25a5162c4fe2792540d573e39d84",
-                "sha256:e3c0efdc30b5e9b166da4b4d4bd0df0585293bbb584837a64cc25a941da8fe53"
+                "sha256:611595ad7b4bdf57aa252027796dac3273ab0f4bc1511e839cce230a351cb710",
+                "sha256:85e2169ade277b68fc3f4b35c25e67a8a441319c3f2bef71f77f8b2c00f552f8"
             ],
             "index": "pypi",
-            "version": "==3.2.0"
+            "version": "==3.3.0"
         },
         "cmd2": {
             "hashes": [
-                "sha256:145cb677ebd0e3cae546ab81c30f6c25e0b08ba0f1071df854d53707ea792633",
-                "sha256:ce779b8bcb6aab05569d6c728eaa093c442bb7478a4998f23f1339e845a33090"
+                "sha256:703f7350c0368b842db6736438e1f6d76511956bad4194e7c6a673099083165c",
+                "sha256:d233b5ad4b9ee264a43fb14668f287d25f998f4b443a81b4efdfd292f1a77108"
             ],
-            "version": "==0.8.9"
+            "version": "==1.1.0"
+        },
+        "colorama": {
+            "hashes": [
+                "sha256:7d73d2a99753107a36ac6b455ee49046802e59d9d076ef8e47b61499fa29afff",
+                "sha256:e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1"
+            ],
+            "version": "==0.4.3"
         },
         "docker": {
             "hashes": [
@@ -278,7 +292,6 @@
                 "sha256:79375666b9954d4a1a10739315816324c3e73110af9d0e102d906fdb0aec009f",
                 "sha256:8c6b5b6ee1360b842645f336d9e5d68c55817c26d3050f46b235ef2bc650e48f"
             ],
-            "markers": "sys_platform != 'win32'",
             "version": "==0.2.4"
         },
         "websocket-client": {
