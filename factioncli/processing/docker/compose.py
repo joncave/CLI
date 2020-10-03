@@ -210,8 +210,7 @@ services:
            config["RABBIT_USERNAME"], config["RABBIT_PASSWORD"], config["POSTGRES_HOST"],
            config["POSTGRES_DATABASE"], config["RABBIT_HOST"], config["CONSOLE_PORT"],
            config["FLASK_SECRET"], config["API_UPLOAD_DIR"], config["SYSTEM_USERNAME"],
-           config["SYSTEM_PASSWORD"]
-           docker_tag)
+           config["SYSTEM_PASSWORD"], docker_tag)
 
     with open(docker_compose_file_path, "w+") as compose_file:
         compose_file.write(docker_compose_file_contents)
